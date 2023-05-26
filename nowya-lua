@@ -1,0 +1,26 @@
+#!/bin/bash
+
+curl -s https://www.lua.org/versions.html > index.html
+
+grep -oP '"([^"]*\.tar\.gz)"[^>]*' index.html | sed 's/"//g' | grep -m1 "" | sed 's|^|http://www.lua.org/|' > url
+
+wget "$(cat url)"
+
+tar zxf lua-*.tar.gz
+
+rm -rf lua-*.tar.gz
+
+mv lua-* lua
+
+cd lua/
+
+make linux
+
+make install
+
+cd
+
+rm -rf url index.html
+
+lua -v
+
